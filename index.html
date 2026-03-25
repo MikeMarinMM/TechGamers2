@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TechGamers - Clínica de consolas y PC en Medellín. Ventas de equipos y accesorios gamer con flujo rápido.">
+    <title>TechGamers | Clínica de Consolas y PC en Medellín</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Encabezado con Glassmorphism -->
+    <header class="glass-header">
+        <div class="logo">
+            <i class="fa-solid fa-gamepad"></i> TechGamers
+        </div>
+        <nav class="desktop-nav">
+            <a href="#servicios">Servicios</a>
+            <a href="#tienda">Tienda</a>
+            <button id="theme-toggle" aria-label="Cambiar tema">
+                <i class="fa-solid fa-sun light-icon"></i>
+                <i class="fa-solid fa-moon dark-icon"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="inicio" class="hero section-spacing">
+            <div class="hero-content">
+                <div class="badge-location">
+                    <i class="fa-solid fa-location-dot"></i> Medellín, Antioquia
+                </div>
+                <h1>Salvamos tu partida.<br><span class="gradient-text">Reparación y Venta Gamers</span></h1>
+                <p>Especialistas en consolas y PC. Diagnóstico rápido, precios competitivos y stock de entrega inmediata.</p>
+                <div class="cta-group">
+                    <button class="btn btn-primary" onclick="openWhatsApp('¡Hola! Necesito cotizar una reparación o mantenimiento para mi consola/PC.')">
+                        <i class="fa-brands fa-whatsapp"></i> Cotizar Reparación
+                    </button>
+                    <a href="#tienda" class="btn btn-secondary">Ver Catálogo</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="glass-card hero-card">
+                    <i class="fa-solid fa-microchip icon-large gradient-text"></i>
+                    <p>Clínica de Consolas y PC</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Servicios (Imán de Tráfico) -->
+        <section id="servicios" class="section-compact section-bg">
+            <h2 class="section-title">Nuestros Servicios</h2>
+            <p class="subtitle">Tráfico rápido, rotación y soluciones eficaces.</p>
+            <div class="grid services-grid">
+                <!-- Tarjeta Servicio 1 -->
+                <div class="card service-card" onclick="openWhatsApp('Requiero reparación para mi consola.')">
+                    <i class="fa-solid fa-screwdriver-wrench gradient-text"></i>
+                    <h3>Clínica de Consolas</h3>
+                    <p>Reparación de mandos (drift, botones), mantenimiento preventivo de PS5, Xbox Series X/S, Nintendo Switch.</p>
+                    <span class="action-text">Agendar mantenimiento <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+                <!-- Tarjeta Servicio 2 -->
+                <div class="card service-card" onclick="openWhatsApp('Necesito mantenimiento para mi PC.')">
+                    <i class="fa-solid fa-computer gradient-text"></i>
+                    <h3>Arreglos de PC</h3>
+                    <p>Formateo, limpieza interna profunda, cambio de pasta térmica y optimización de rendimiento gamer.</p>
+                    <span class="action-text">Agendar ahora <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tienda / Venta Rápida (El Embudo) -->
+        <section id="tienda" class="section-compact">
+            <h2 class="section-title">Venta de Rotación</h2>
+            <p class="subtitle">Stock inmediato en accesorios, consolas y equipos.</p>
+            <div class="grid store-grid">
+                <!-- Producto 1 -->
+                <div class="card product-card">
+                    <div class="prod-img dummy-ps5">
+                        <i class="fa-brands fa-playstation"></i>
+                    </div>
+                    <h3>Control PS5 DualSense</h3>
+                    <p class="price">$320.000 COP</p>
+                    <button class="btn btn-small" onclick="openWhatsApp('Me interesa comprar el Control PS5 DualSense por $320.000 COP')">Comprar por WhatsApp</button>
+                </div>
+                <!-- Producto 2 -->
+                <div class="card product-card">
+                    <div class="prod-img dummy-headset">
+                        <i class="fa-solid fa-headphones"></i>
+                    </div>
+                    <h3>Audífonos Gamer 7.1</h3>
+                    <p class="price">$150.000 COP</p>
+                    <button class="btn btn-small" onclick="openWhatsApp('Me interesa comprar los Audífonos Gamer 7.1 por $150.000 COP')">Comprar por WhatsApp</button>
+                </div>
+                <!-- Producto 3 -->
+                <div class="card product-card">
+                    <div class="prod-img dummy-switch">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <h3>Nintendo Switch OLED</h3>
+                    <p class="price">$1.650.000 COP</p>
+                    <button class="btn btn-small" onclick="openWhatsApp('Me interesa comprar la Nintendo Switch OLED por $1.650.000 COP')">Comprar por WhatsApp</button>
+                </div>
+                <!-- Producto 4 -->
+                <div class="card product-card">
+                    <div class="prod-img dummy-mouse">
+                        <i class="fa-solid fa-computer-mouse"></i>
+                    </div>
+                    <h3>Mouse RGB Competitivo</h3>
+                    <p class="price">$120.000 COP</p>
+                    <button class="btn btn-small" onclick="openWhatsApp('Me interesa comprar el Mouse RGB Competitivo por $120.000 COP')">Comprar por WhatsApp</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Contacto y Formulario Mailto / WA -->
+        <section id="contacto" class="section-compact section-bg">
+            <h2 class="section-title">Contacto Rápido</h2>
+            <div class="contact-box">
+                <p>Escríbenos directamente y te daremos cotización inmediata.</p>
+                <div class="cta-group contact-ctas">
+                    <button class="btn btn-primary" onclick="openWhatsApp('Hola TechGamers, necesito información.')">
+                        <i class="fa-brands fa-whatsapp"></i> WhatsApp +57 (300) 000-0000
+                    </button>
+                    <!-- Formulario mailto -->
+                    <a href="mailto:ventas@techgamers.com.co?subject=Consulta%20General&body=Hola,%20me%20gustaría%20saber%20más%20sobre..." class="btn btn-secondary">
+                        <i class="fa-solid fa-envelope"></i> Enviar Correo
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="geo-info">
+                TechGamers &copy; 2026<br>
+                <i class="fa-solid fa-location-dot"></i> Medellín, Antioquia, Colombia
+            </div>
+            <!-- Botón Volver al Inicio -->
+            <button id="btn-back-to-top" class="btn btn-outline" aria-label="Volver arriba">
+                <i class="fa-solid fa-chevron-up"></i> Volver al Inicio
+            </button>
+        </div>
+    </footer>
+
+    <!-- JS Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
