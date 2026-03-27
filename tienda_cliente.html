@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Público | TechGamers</title>
+    <!-- Estética Base del Proyecto -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .grid-cliente {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 2.5rem; margin-top: 2rem; width: 100%;
+        }
+        .header-acciones { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;}
+        
+        .product-card {
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(92, 60, 252, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <header class="glass-header">
+        <div class="logo">
+            <a href="index.html" style="color:inherit; font-weight: 800;"><i class="fa-solid fa-gamepad"></i> TechGamers</a>
+        </div>
+        <div class="header-acciones">
+            <span id="identidadCliente" style="opacity:0.8; font-weight:600; color:var(--primary); font-size: 1.1rem; margin-right: 10px;"></span>
+            
+            <a id="btnAuth" href="login.html" class="btn btn-outline" style="border-radius: 20px; font-weight: 600;">
+                <i class="fa-solid fa-user-circle"></i> Iniciar Sesión para Comprar
+            </a>
+            
+            <!-- Integración nativa de toggle global -->
+            <button id="theme-toggle" class="btn" style="background:transparent; color:var(--text-color); font-size: 1.2rem; cursor:pointer; border:none;">
+                <i class="fa-solid fa-sun light-icon"></i><i class="fa-solid fa-moon dark-icon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main style="padding-top: 90px;">
+        <section class="section-spacing section-bg" style="min-height: 85vh; padding-top: 1rem;">
+            
+            <div style="text-align: center; margin-bottom: 4rem;">
+                <h2 style="font-size: 3rem; margin-bottom: 0.5rem;"><span class="gradient-text">Tienda Oficial</span> y Reparaciones</h2>
+                <p style="opacity: 0.75; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Explora hardware importado y cotiza servicios médicos de consola. Solo desplegamos unidades que tenemos en stock de entrega inmediata.</p>
+            </div>
+            
+            <div class="grid-cliente" id="tienda-grid">
+                <div style="grid-column: 1/-1; text-align:center; font-size: 1.2rem; opacity: 0.8;">
+                    <i class="fa-solid fa-circle-notch fa-spin fa-2x text-primary" style="margin-bottom: 15px; display:block;"></i> Auditando existencia en bodegas centrales...
+                </div>
+            </div>
+            
+        </section>
+    </main>
+
+    <!-- Scripts Esenciales -->
+    <script src="script.js"></script>
+    <script src="tienda_cliente.js"></script>
+</body>
+</html>

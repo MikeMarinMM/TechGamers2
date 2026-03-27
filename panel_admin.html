@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración Seguro | TechGamers</title>
+    <!-- Estética Base del Proyecto -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Librerías y Guardias de Dominio (Admin) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="auth_guard.js"></script>
+    
+    <style>
+        /* Bloqueo Oculto de Seguridad: Previene que usuarios sin token vean la interfaz milisegundos antes del chequeo */
+        body { display: none; }
+        
+        /* Layout Específico para Inventarios */
+        .admin-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;
+        }
+        
+        .catalog-table-wrapper {
+            background: var(--card-bg); border-radius: 12px; overflow-x: auto;
+            border: 1px solid var(--border-color); padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+        }
+        
+        table.admin-table {
+            width: 100%; border-collapse: collapse; text-align: left;
+        }
+        table.admin-table th, table.admin-table td {
+            padding: 14px 15px; border-bottom: 1px solid var(--border-color);
+        }
+        table.admin-table th { font-weight: 800; color: var(--primary); text-transform: uppercase; font-size: 0.9rem;}
+        table.admin-table tr:hover { background-color: rgba(92, 60, 252, 0.05); }
+        
+        /* Modal y Textarea */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0;
+            width: 100%; height: 100%; background-color: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px); align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background-color: var(--card-bg); padding: 2.5rem;
+            border: 2px solid var(--primary); border-radius: 16px; width: 90%; max-width: 600px;
+            color: var(--text-color); max-height: 90vh; overflow-y: auto;
+        }
+        .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-btn:hover { color: var(--primary); }
+        
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; opacity: 0.9; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px; border-radius: 8px; font-family: 'Outfit';
+            border: 1px solid var(--border-color); background: var(--bg-secondary); color: var(--text-color);
+        }
+        
+        /* Botones Acción Rápida */
+        .btn-sm { padding: 8px 14px; font-size: 0.9rem; border-radius: 6px; cursor: pointer; font-weight: 600; border:none; margin-right: 5px; color: white;}
+        .edit-row { background: #e67e22; } .edit-row:hover { background: #d35400; }
+        .delete-row { background: #e74c3c; } .delete-row:hover { background: #c0392b; }
+        
+        .nav-actions { display: flex; gap: 1rem; align-items: center; }
+    </style>
+</head>
+<body>
+    <header class="glass-header">
+        <div class="logo">
+            <i class="fa-solid fa-gamepad"></i> TechGamers | <span style="color:var(--primary); font-weight: 400; font-size:1.2rem; letter-spacing: 1px;">Admin Dashboard</span>
+        </div>
+        
+        <button id="mobile-menu-btn" class="hamburger-btn">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        
+        <div class="nav-actions" id="main-nav">
+            <!-- Navegación: Botón Estético hacia la Web Pública -->
+            <a href="index.html" class="btn btn-outline" style="border-radius: 20px;">
+                <i class="fa-solid fa-house"></i> Volver a la página inicial
+            </a>
+            <!-- Opción para desconectarse borrando token -->
+            <button class="btn btn-secondary" onclick="cerrarSesion()" style="border-radius: 20px;">
+                <i class="fa-solid fa-right-from-bracket"></i> Salir de la Sesión
+            </button>
+        </div>
+    </header>
+
+    <main style="padding-top: 90px;">
+        <section class="section-spacing section-bg" style="min-height: 85vh; padding-top: 1rem;">
+            <div class="admin-header">
+                <div>
+                    <h2>Vista y Control de Inventario Real</h2>
+                    <p style="opacity: 0.8">Conectado a MySQL local en tiempo real. Token Validado: <strong id="adminName" style="color:var(--primary)"></strong></p>
+                </div>
+                <button class="btn btn-primary" id="btnNuevoProducto">
+                    <i class="fa-solid fa-address-book"></i> Ingresar Nueva Mercancía
+                </button>
+            </div>
+            
+            <div class="catalog-table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Nº ID</th>
+                            <th>Articulo y Detalles Técnicos</th>
+                            <th>Unidades</th>
+                            <th>Precio Facturado</th>
+                            <th>Cat ID</th>
+                            <th>Modificación Crítica</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-productos">
+                        <tr><td colspan="6" style="text-align:center;"><i class="fa-solid fa-circle-notch fa-spin"></i> Auditando acceso Backend...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Enriquecido para Crear/Editar -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h3 id="modalTitle" style="margin-bottom: 0.5rem; font-size: 1.8rem;" class="gradient-text">Formulario de Mercancía</h3>
+            <p style="margin-bottom: 1.5rem; opacity: 0.7;">Llena los metadatos requeridos por la base de datos MySQL.</p>
+            
+            <form id="productForm">
+                <input type="hidden" id="prod_id">
+                
+                <div class="form-group">
+                    <label><i class="fa-solid fa-tag"></i> Nombre descriptivo del producto o servicio</label>
+                    <input type="text" id="prod_nombre" placeholder="Ej: Control Inalámbrico DualSense Edición Limitada" required>
+                </div>
+                
+                <!-- ÁREA DE TEXTO ENRIQUECIDO REQUERIDO -->
+                <div class="form-group">
+                    <label><i class="fa-solid fa-paragraph"></i> Descripción Detallada e Instrucciones</label>
+                    <textarea id="prod_desc" rows="4" placeholder="Ingresa todas las especificaciones técnicas del hardware, garantías extendidas, o advertencias al cliente sobre el producto o la reparación." required></textarea>
+                </div>
+
+                <!-- INPUT MÁSTER IMAGEN CON PREVISUALIZACIÓN -->
+                <div class="form-group">
+                    <label><i class="fa-solid fa-image"></i> Fotografía Principal (JPEG / PNG / WEBP)</label>
+                    <input type="file" id="prod_imagen" accept="image/png, image/jpeg, image/webp" style="background:var(--card-bg); padding:10px; cursor:pointer;">
+                    
+                    <div style="text-align: center; margin-top: 15px;">
+                        <img id="preview_imagen" src="" alt="Vista Previa Activa" style="max-width:250px; max-height:250px; border-radius:12px; display:none; border:2px dashed var(--primary); object-fit:contain; box-shadow: 0 0 15px rgba(92, 60, 252, 0.3);">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <div class="form-group" style="flex:1; min-width: 150px;">
+                        <label><i class="fa-solid fa-money-bill"></i> Precio Comercial (COP)</label>
+                        <input type="number" id="prod_precio" placeholder="Ej: 320000" min="0" required>
+                    </div>
+                    <div class="form-group" style="flex:1; min-width: 150px;">
+                        <label><i class="fa-solid fa-box"></i> Stock en Bodega</label>
+                        <input type="number" id="prod_stock" min="0" value="1" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fa-solid fa-layer-group"></i> Id de Categorización E-Commerce</label>
+                    <select id="prod_categoria" required>
+                        <option value="1">Categoría 1: Consolas Maestras</option>
+                        <option value="2">Categoría 2: Componentes PC (Hardware)</option>
+                        <option value="3">Categoría 3: Accesorios y Mobiliario</option>
+                        <option value="4">Categoría 4: Servicios Clínicos Reparativos</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 8px; padding: 14px; font-size: 1.1rem; margin-top: 10px;">
+                    <i class="fa-solid fa-floppy-disk"></i> Ejecutar Guardado Seguro
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script de lógica de Sesión y Manejo REST Cifrado -->
+    <script src="panel_admin.js"></script>
+</body>
+</html>

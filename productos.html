@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión Backend de Productos | TechGamers</title>
+    <!-- CSS Nativo -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="auth_guard.js"></script>
+    <style>
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2rem; margin-top: 2rem; width: 100%;
+        }
+        .admin-controls {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;
+            flex-wrap: wrap; gap: 1rem;
+        }
+        
+        /* Modal (Formulario de Creación/Edición) */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0;
+            width: 100%; height: 100%; overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background-color: var(--card-bg); margin: 5% auto; padding: 2rem;
+            border: 1px solid var(--primary); border-radius: 16px; width: 90%; max-width: 500px;
+            color: var(--text-color); box-shadow: var(--shadow-soft);
+        }
+        .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-btn:hover { color: var(--primary); }
+        
+        /* Controles de Formulario */
+        .form-group { margin-bottom: 1.2rem; text-align: left; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px; border-radius: 8px; font-family: 'Outfit';
+            border: 1px solid var(--border-color); background: var(--bg-secondary); color: var(--text-color);
+        }
+        .form-group input:focus { outline: none; border-color: var(--primary); }
+        
+        /* Botones CRUD Tarjeta */
+        .card-actions { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-edit { background: #f39c12; color: #fff; border: none; padding: 10px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: 600;}
+        .btn-edit:hover { background: #d68910; }
+        .btn-delete { background: #e74c3c; color: #fff; border: none; padding: 10px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: 600;}
+        .btn-delete:hover { background: #cb4335; }
+    </style>
+</head>
+<body>
+    <header class="glass-header">
+        <div class="logo">
+            <a href="index.html"><i class="fa-solid fa-gamepad"></i> TechGamers Admin</a>
+        </div>
+        
+        <button id="mobile-menu-btn" class="hamburger-btn">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <nav class="desktop-nav" id="main-nav">
+            <a href="index.html">Volver a Tienda Pública</a>
+            <button id="theme-toggle" aria-label="Cambiar tema">
+                <i class="fa-solid fa-sun light-icon"></i><i class="fa-solid fa-moon dark-icon"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section-spacing section-bg" style="min-height: 85vh;">
+            <div class="admin-controls">
+                <div>
+                    <h2>Panel de Inventario en Vivo (CRUD)</h2>
+                    <p style="opacity: 0.8">Los datos se renderizan conectando el frontend con Express (Node) y MySQL.</p>
+                </div>
+                <button class="btn btn-primary" id="btnNuevoProducto">
+                    <i class="fa-solid fa-plus"></i> Añadir Registro
+                </button>
+            </div>
+            
+            <div class="catalog-grid" id="productos-grid">
+                <p><i class="fa-solid fa-spinner fa-spin"></i> Conectando al backend en localhost:3000...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Formulario -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h3 id="modalTitle" style="margin-bottom: 1.5rem;">Cargar Producto</h3>
+            <form id="productForm">
+                <input type="hidden" id="prod_id">
+                
+                <div class="form-group">
+                    <label>Nombre del Producto / Servicio</label>
+                    <input type="text" id="prod_nombre" placeholder="Ej: Control Elite Series 2" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Precio de Venta (COP)</label>
+                    <input type="number" id="prod_precio" placeholder="Ej: 500000" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select id="prod_categoria" required>
+                        <option value="1">Consolas</option>
+                        <option value="2">Componentes de PC</option>
+                        <option value="3">Accesorios / Periféricos</option>
+                        <option value="4">Servicios (Clínica)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Stock / Unidades en bodega</label>
+                    <input type="number" id="prod_stock" value="1" min="0" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 14px;">
+                    <i class="fa-solid fa-save"></i> Guardar en Base de Datos
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Principal y Lógica Fetch -->
+    <script src="script.js"></script>
+    <script src="productos.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>Acceso Personal | TechGamers</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .login-container { display:flex; justify-content:center; align-items:center; min-height:85vh; padding-top: 70px; }
+        .login-box { 
+            background: var(--card-bg); padding: 3rem; border-radius: 16px; 
+            border: 1px solid var(--primary); text-align: center; width: 100%; max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .form-group { text-align: left; margin-bottom: 1.5rem; }
+        .form-group label { font-weight: 600; opacity: 0.9; }
+        .form-group input { 
+            width: 100%; padding: 12px; border-radius: 8px; 
+            border: 1px solid var(--border-color); background: var(--bg-secondary); 
+            color: var(--text-color); margin-top:0.5rem; font-family: 'Outfit';
+        }
+        .form-group input:focus { outline: none; border-color: var(--primary); }
+    </style>
+</head>
+<body>
+    <header class="glass-header">
+        <div class="logo"><i class="fa-solid fa-gamepad"></i> TechGamers | <span style="font-weight:400; color:var(--primary);">Intranet</span></div>
+        <a href="index.html" class="btn btn-outline" style="border-radius:20px;"><i class="fa-solid fa-house"></i> Ir a la Tienda</a>
+    </header>
+
+    <main class="login-container section-bg">
+        <div class="login-box">
+            <i class="fa-solid fa-user-shield" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+            <h2 style="margin-bottom: 0.5rem;">Iniciar Sesión</h2>
+            <p style="opacity:0.8; margin-bottom: 2rem;">Ingresa tus credenciales autorizadas.</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="email" required placeholder="admin@techgamers.com">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%; padding:14px; font-size:1.1rem; border-radius:10px;">
+                    <i class="fa-solid fa-right-to-bracket"></i> Entrar al Sistema
+                </button>
+            </form>
+            
+            <p id="errorMsg" style="color:#e74c3c; margin-top:1.5rem; display:none; font-weight:600; background:rgba(231,76,60,0.1); padding:10px; border-radius:8px;"></p>
+        </div>
+    </main>
+
+    <script>
+        // Intercepción del formulario de login
+        document.getElementById('loginForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const errorBox = document.getElementById('errorMsg');
+            
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Verificando...';
+            errorBox.style.display = 'none';
+
+            try {
+                // Hacemos un llamado HTTP POST al Controller de Autenticación en NodeJS
+                const res = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        correo: document.getElementById('email').value,
+                        password: document.getElementById('password').value
+                    })
+                });
+                
+                const data = await res.json();
+                
+                // Si la contraseña es válida y NodeJS nos suelta el Token JWT:
+                if(res.ok) {
+                    // INYECCIÓN DE SEGURIDAD AL NAVEGADOR (Frontend)
+                    localStorage.setItem('tg_token', data.token);
+                    localStorage.setItem('tg_user', JSON.stringify(data.user));
+                    
+                    // Lógica de Redirección: Admin al Panel, Clientes a la Portada
+                    if(data.user.rol === 1) {
+                        window.location.replace('panel_admin.html');
+                    } else {
+                        window.location.replace('index.html');
+                    }
+                } else {
+                    // Clave incorrecta / Sin registro
+                    errorBox.innerText = data.message;
+                    errorBox.style.display = 'block';
+                    btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Entrar al Sistema';
+                }
+                
+            } catch (error) {
+                // No hay internet o Backend node apagado
+                errorBox.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Servidor Backend Caído o Inaccesible. (node server.js)';
+                errorBox.style.display = 'block';
+                btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Entrar al Sistema';
+            }
+        };
+    </script>
+</body>
+</html>

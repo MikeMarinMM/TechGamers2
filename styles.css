@@ -50,6 +50,7 @@ a {
 .gradient-text {
     background: linear-gradient(45deg, var(--primary), var(--accent));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -318,8 +319,56 @@ main {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
-.store-grid {
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+/* SLIDER DE PRODUCTOS */
+.slider-container {
+    width: 100%;
+    overflow: hidden;
+    padding: 1rem 0;
+    position: relative;
+    cursor: grab;
+}
+
+.slider-container:active {
+    cursor: grabbing;
+}
+
+.slider-wrapper {
+    display: flex;
+    gap: 1.5rem;
+    width: max-content;
+    will-change: transform;
+}
+
+/* Evitar que las tarjetas del slider se encojan y establecer ancho */
+.slider-wrapper .product-card {
+    width: 280px;
+    flex-shrink: 0;
+}
+
+/* Botón Ver más productos */
+.more-products-container {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.btn-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-more:hover {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.btn-more:hover i {
+    transform: translateX(5px);
+    transition: transform 0.3s ease;
 }
 
 /* CARDS COMMON */
@@ -447,37 +496,125 @@ footer {
     line-height: 1.6;
 }
 
-/* RESPONSIVE */
+/* =========================================
+   RESPONSIVE DESIGN & MOBILE MENU
+   ========================================= */
+.hamburger-btn {
+    display: none; background: transparent; border: none; font-size: 1.8rem;
+    color: var(--text-color); cursor: pointer; z-index: 2000; transition: 0.3s;
+}
+.hamburger-btn:hover { color: var(--primary); transform: scale(1.1); }
+.hamburger-btn:focus { outline: none; }
+
 @media (max-width: 900px) {
-    .hero {
-        flex-direction: column;
-        justify-content: center;
-        text-align: center;
-        min-height: auto;
+    .hamburger-btn { display: block; }
+    
+    .desktop-nav, .nav-actions {
+        position: fixed; top: 0; right: -100%; width: 280px; height: 100vh;
+        background: rgba(15, 17, 26, 0.98); backdrop-filter: blur(15px);
+        flex-direction: column; justify-content: flex-start; align-items: flex-start;
+        padding: 90px 30px 30px 30px !important; border-left: 2px solid rgba(92, 60, 252, 0.3);
+        transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: -10px 0 30px rgba(0,0,0,0.5); z-index: 1000; display:flex !important;
     }
-    .hero-content {
-        margin-top: 2rem;
+    
+    .desktop-nav.active, .nav-actions.active { right: 0; }
+    
+    .desktop-nav a, .nav-actions a, .nav-actions button { 
+        font-size: 1.1rem; margin-bottom: 20px; width: 100%; 
+        border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; justify-content:center;
     }
-    .hero-visual {
-        margin-top: 3rem;
-        margin-bottom: 2rem;
-        width: 100%;
-        max-width: 400px;
-    }
-    .badge-location {
-        margin: 0 auto 1.5rem auto;
-    }
-    .cta-group {
-        justify-content: center;
-    }
+    
+    #userMenuNav { flex-direction: column; width: 100%; }
+    #authNavContainer { margin-top: 15px; width: 100%; }
+    #authNavContainer button, #authNavContainer a { width: 100%; justify-content: center; margin-bottom: 15px; font-size:1.1rem; padding: 15px;}
+    
+    #theme-toggle { position: absolute; bottom: 30px; right: 30px; margin:0;}
+    
+    .hero { flex-direction: column; justify-content: center; text-align: center; min-height: auto; }
+    .hero-content { margin-top: 2rem; }
+    .hero-visual { margin-top: 3rem; margin-bottom: 2rem; width: 100%; max-width: 400px; }
+    .badge-location { margin: 0 auto 1.5rem auto; }
+    .cta-group { justify-content: center; flex-direction: column; gap: 1rem; width: 100%; }
+    .cta-group .btn { width: 100%; padding: 15px;}
 }
 
 @media (max-width: 600px) {
-    .hero h1 {
-        font-size: 2.5rem;
-    }
-    .footer-content {
-        flex-direction: column;
-        text-align: center;
-    }
+    .glass-header { padding: 0 15px; }
+    .hero h1 { font-size: 2.2rem; }
+    .footer-content { flex-direction: column; text-align: center; }
+    .store-grid, .catalog-grid { grid-template-columns: 1fr !important; }
+    .filter-btn { width: 100%; margin-bottom: 10px; }
+    .filter-btn:last-child { margin-bottom: 0;}
+    
+    .admin-header { flex-direction: column; align-items: stretch; text-align:center;}
+    .admin-header button { width:100%; margin-top: 15px; padding:15px;}
+}
+
+img { max-width: 100%; height: auto; }
+
+/* =========================================
+   AUTH MODAL STYLES (INDEX & GLOBAL) - GAMER NEON EDITION
+   ========================================= */
+.auth-tabs {
+    display: flex; border-bottom: 2px solid rgba(92, 60, 252, 0.3); margin-bottom: 2rem;
+}
+.auth-tab {
+    flex: 1; text-align: center; padding: 15px; cursor: pointer; font-weight: 800; opacity: 0.4; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-transform: uppercase; letter-spacing: 1px;
+}
+.auth-tab:hover { opacity: 0.8; text-shadow: 0 0 8px var(--primary); }
+.auth-tab.active {
+    opacity: 1; 
+    border-bottom: 3px solid var(--accent); 
+    color: var(--accent); 
+    background: linear-gradient(180deg, rgba(0, 210, 255, 0) 0%, rgba(0, 210, 255, 0.08) 100%); 
+    border-radius: 8px 8px 0 0;
+    text-shadow: 0 0 12px var(--accent);
+}
+.auth-form { display: none; animation: neonFadeIn 0.4s; }
+.auth-form.active { display: block; }
+
+@keyframes neonFadeIn {
+    from { opacity: 0; transform: translateY(15px); filter: brightness(0.5); }
+    to { opacity: 1; transform: translateY(0); filter: brightness(1); }
+}
+
+/* Modal Core Defaults - Gamer Aesthetics */
+.modal {
+    display: none; position: fixed; z-index: 4000; left: 0; top: 0;
+    width: 100%; height: 100%; 
+    background-color: rgba(10, 11, 16, 0.95); /* Deep dark void */
+    backdrop-filter: blur(15px); align-items: center; justify-content: center;
+}
+.modal-content {
+    background-color: #12141d; padding: 3rem;
+    border: 1px solid rgba(92, 60, 252, 0.5); border-radius: 20px; width: 90%; max-width: 480px;
+    color: var(--text-color); position: relative;
+    max-height: 95vh; overflow-y: auto; margin: 0 auto;
+    /* Efecto Neon Principal (Brillo Exterior e Interior Mágico) */
+    box-shadow: 0 0 40px rgba(92, 60, 252, 0.35), inset 0 0 20px rgba(92, 60, 252, 0.1);
+}
+.close-btn { 
+    color: #555; position:absolute; top:20px; right:25px; font-size: 32px; font-weight: 300; cursor: pointer; transition:0.3s;
+}
+.close-btn:hover { 
+    color: #ff0055; transform: scale(1.2) rotate(90deg); text-shadow: 0 0 15px #ff0055;
+}
+
+/* Rediseño de Inputs Mode Gamer dentro los Modales */
+.auth-form .form-group input, .auth-form .form-group select {
+    background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: var(--text-color);
+    transition: all 0.3s; border-radius: 8px; font-size: 1rem;
+}
+.auth-form .form-group input:focus, .auth-form .form-group select:focus {
+    border-color: var(--accent); outline: none;
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.4); /* Resplandor Ciberpunk al tipear */
+}
+.modal-content button[type="submit"] {
+    position: relative; overflow: hidden; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+    box-shadow: 0 0 20px rgba(92, 60, 252, 0.6); transition: 0.3s; border: none; padding: 15px; border-radius: 10px;
+}
+.modal-content button[type="submit"]:hover {
+    box-shadow: 0 0 35px rgba(92, 60, 252, 0.9), inset 0 0 10px rgba(255,255,255,0.3);
+    transform: scale(1.03);
 }

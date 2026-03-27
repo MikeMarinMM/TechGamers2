@@ -13,16 +13,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Librerías y Guardias Globales -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="auth_guard.js"></script>
 </head>
 <body>
     <!-- Encabezado con Glassmorphism -->
     <header class="glass-header">
         <div class="logo">
-            <i class="fa-solid fa-gamepad"></i> TechGamers
+            <i class="fa-solid fa-gamepad" style="color: var(--primary);"></i>
+            Tech<span class="gradient-text">Gamers</span>
         </div>
-        <nav class="desktop-nav">
-            <a href="#servicios">Servicios</a>
-            <a href="#tienda">Tienda</a>
+        
+        <button id="mobile-menu-btn" class="hamburger-btn">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <nav class="desktop-nav" id="main-nav">
+            <a href="#servicios">Servicios Clínicos</a>
+            <a href="tienda_cliente.html" style="color:var(--primary); font-weight:800;">Tienda Oficial</a>
+            
+            <!-- Contenedor dinámico de Autenticación. El script decidirá si muestra Botón "Ingresar" o nombre del Admin/Cliente Logueado -->
+            <div id="authNavContainer">
+                <!-- Se mostrará por defecto antes de auditar token -->
+                <button class="btn btn-outline" id="btnOpenAuthModal" style="border-radius:20px; font-size:0.9rem; padding:8px 16px;">
+                    <i class="fa-solid fa-user"></i> Ingresar / Registro
+                </button>
+            </div>
+
             <button id="theme-toggle" aria-label="Cambiar tema">
                 <i class="fa-solid fa-sun light-icon"></i>
                 <i class="fa-solid fa-moon dark-icon"></i>
@@ -76,47 +95,24 @@
             </div>
         </section>
 
-        <!-- Tienda / Venta Rápida (El Embudo) -->
-        <section id="tienda" class="section-compact">
-            <h2 class="section-title">Venta de Rotación</h2>
-            <p class="subtitle">Stock inmediato en accesorios, consolas y equipos.</p>
-            <div class="grid store-grid">
-                <!-- Producto 1 -->
-                <div class="card product-card">
-                    <div class="prod-img dummy-ps5">
-                        <i class="fa-brands fa-playstation"></i>
-                    </div>
-                    <h3>Control PS5 DualSense</h3>
-                    <p class="price">$320.000 COP</p>
-                    <button class="btn btn-small" onclick="openWhatsApp('Me interesa comprar el Control PS5 DualSense por $320.000 COP')">Comprar por WhatsApp</button>
-                </div>
-                <!-- Producto 2 -->
-                <div class="card product-card">
-                    <div class="prod-img dummy-headset">
-                        <i class="fa-solid fa-headphones"></i>
-                    </div>
-                    <h3>Audífonos Gamer 7.1</h3>
-                    <p class="price">$150.000 COP</p>
-                    <button class="btn btn-small" onclick="openWhatsApp('Me interesa comprar los Audífonos Gamer 7.1 por $150.000 COP')">Comprar por WhatsApp</button>
-                </div>
-                <!-- Producto 3 -->
-                <div class="card product-card">
-                    <div class="prod-img dummy-switch">
-                        <i class="fa-solid fa-gamepad"></i>
-                    </div>
-                    <h3>Nintendo Switch OLED</h3>
-                    <p class="price">$1.650.000 COP</p>
-                    <button class="btn btn-small" onclick="openWhatsApp('Me interesa comprar la Nintendo Switch OLED por $1.650.000 COP')">Comprar por WhatsApp</button>
-                </div>
-                <!-- Producto 4 -->
-                <div class="card product-card">
-                    <div class="prod-img dummy-mouse">
-                        <i class="fa-solid fa-computer-mouse"></i>
-                    </div>
-                    <h3>Mouse RGB Competitivo</h3>
-                    <p class="price">$120.000 COP</p>
-                    <button class="btn btn-small" onclick="openWhatsApp('Me interesa comprar el Mouse RGB Competitivo por $120.000 COP')">Comprar por WhatsApp</button>
-                </div>
+        <!-- Tienda / Venta Rápida Dinámica -->
+        <section id="tienda" class="section-compact section-spacing section-bg" style="padding-top: 3rem; margin-top:2rem;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h2 class="section-title" style="font-size: 2.8rem;">Setup<span class="gradient-text">Gamer</span> Oficial</h2>
+                <p class="subtitle" style="max-width: 600px; margin: 0 auto; line-height: 1.6; opacity: 0.8;">Explora nuestro inventario sincronizado en tiempo real. ¡La mejor tecnología garantizada!</p>
+            </div>
+            
+            <!-- Nuevos Filtros de Categoría -->
+            <div style="display:flex; justify-content:center; gap:10px; margin-bottom: 3rem; flex-wrap: wrap;">
+                <button class="btn btn-outline filter-btn active" onclick="filtrarCatalogo('all')" style="border-radius:20px; font-weight:600;">Todos</button>
+                <button class="btn btn-outline filter-btn" onclick="filtrarCatalogo(1)" style="border-radius:20px; font-weight:600;"><i class="fa-solid fa-gamepad"></i> Consolas</button>
+                <button class="btn btn-outline filter-btn" onclick="filtrarCatalogo(2)" style="border-radius:20px; font-weight:600;"><i class="fa-solid fa-microchip"></i> PC & Partes</button>
+                <button class="btn btn-outline filter-btn" onclick="filtrarCatalogo(3)" style="border-radius:20px; font-weight:600;"><i class="fa-solid fa-headset"></i> Accesorios</button>
+            </div>
+
+            <!-- Contenedor Dinámico: Reemplazo del Antiguo Slider -->
+            <div class="store-grid" id="dynamic-catalog" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(290px, 1fr)); gap:2.5rem; width:100%; max-width:1200px; margin: 0 auto;">
+                <p style="text-align:center; grid-column:1/-1; font-size:1.2rem; opacity:0.8;"><i class="fa-solid fa-spinner fa-spin text-primary"></i> Sincronizando Bodega MySQL...</p>
             </div>
         </section>
 
@@ -151,6 +147,58 @@
             </button>
         </div>
     </footer>
+
+    <!-- Modal de Autenticación (Login / Registro) con Inyección JWT -->
+    <div id="authModal" class="modal">
+        <div class="modal-content" style="max-width:420px; padding:2.5rem; position:relative;">
+            <span class="close-btn" id="closeAuthModal" style="position:absolute; top:20px; right:25px;">&times;</span>
+            
+            <div class="auth-tabs">
+                <div class="auth-tab active" id="tabLoginBtn" onclick="switchAuthTab('login')">Ingresar</div>
+                <div class="auth-tab" id="tabRegisterBtn" onclick="switchAuthTab('register')">Registrarse</div>
+            </div>
+
+            <!-- Panel de Notificaciones HTTP de Error -->
+            <p id="authErrorMsg" style="color:#e74c3c; display:none; background:rgba(231,76,60,0.1); padding:10px; border-radius:8px; font-weight:600; text-align:center; font-size:0.9rem; margin-bottom:1.5rem;"></p>
+
+            <!-- 1. Formulario Estandar: Login Segurizado -->
+            <form id="globalLoginForm" class="auth-form active">
+                <div class="form-group">
+                    <label><i class="fa-solid fa-envelope"></i> Correo Electrónico</label>
+                    <input type="email" id="login_email" required placeholder="tu@correo.com">
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-key"></i> Contraseña</label>
+                    <input type="password" id="login_pass" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%; margin-top:20px; padding:12px; font-size:1.1rem;"><i class="fa-solid fa-right-to-bracket"></i> Sistema Auth</button>
+            </form>
+
+            <!-- 2. Formulario Multi-Roles: Registro Híbrido DB -->
+            <form id="globalRegisterForm" class="auth-form">
+                <div class="form-group">
+                    <label>Nombre y Apellido</label>
+                    <input type="text" id="reg_nombre" required placeholder="Ej: Juan Pérez">
+                </div>
+                <div class="form-group">
+                    <label>Correo Electrónico (Tu ID único)</label>
+                    <input type="email" id="reg_email" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña Segura (Bcrypt)</label>
+                    <input type="password" id="reg_pass" minlength="5" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-user-shield"></i> Selección Manual de ROL (Académico)</label>
+                    <select id="reg_rol" required>
+                        <option value="2">Cliente Frecuente (Limitado a Storefront)</option>
+                        <option value="1">Administrador Senior (E-Commerce Dev)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%; margin-top:20px; padding:12px; background:#2ecc71; border-color:#2ecc71;"><i class="fa-solid fa-user-plus"></i> Inyectar al Servidor MySQL</button>
+            </form>
+        </div>
+    </div>
 
     <!-- JS Scripts -->
     <script src="script.js"></script>
