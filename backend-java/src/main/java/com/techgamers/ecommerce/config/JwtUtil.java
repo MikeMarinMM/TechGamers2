@@ -1,0 +1,54 @@
+package com.techgamers.ecommerce.config;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.Map;
+
+@Component
+public class JwtUtil {
+
+    private final SecretKey secretKey;
+    private final long expiration;
+
+    public JwtUtil(
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.expiration}") long expiration) {
+        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        this.expiration = expiration;
+    }
+
+    public String generarToken(String correo, Long rolId, String nombre) {
+        return Jwts.builder()
+                .subject(correo)
+                .claim("rolId", rolId)
+                .claim("nombre", nombre)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(secretKey)
+                .compact();
+    }
+
+    public Claims validarYExtraerClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+    
+    public boolean validarToken(String token) {
+        try {
+            validarYExtraerClaims(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+}

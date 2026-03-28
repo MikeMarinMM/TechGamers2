@@ -57,7 +57,7 @@ async function inicializarCatalogoIndex() {
     if (!contenedor) return; 
 
     try {
-        const res = await fetch('http://localhost:3000/api/productos');
+        const res = await fetch('http://localhost:8080/api/productos');
         productosGlobal = await res.json();
         renderizarCatalogoHTML(productosGlobal);
     } catch {
@@ -82,7 +82,7 @@ function renderizarCatalogoHTML(productos) {
         
         // Lazy Loading imagen genérica o Lectura Dirigida desde MySQL Backend (Node.js/uploads)
         const placeholder = 'https://img.freepik.com/vector-gratis/ilustracion-icono-vectorial-dibujos-animados-controlador-juego-lentes-vr-concepto-icono-tecnologia-juego-plano_138676-4394.jpg?w=300&loading=lazy';
-        const urlImagen = (prod.url_imagen && prod.url_imagen !== 'null' && prod.url_imagen !== '') ? `http://localhost:3000${prod.url_imagen}` : placeholder;
+        const urlImagen = (prod.url_imagen && prod.url_imagen !== 'null' && prod.url_imagen !== '') ? `http://localhost:8080${prod.url_imagen}` : placeholder;
 
         const card = document.createElement('div');
         card.className = 'card product-card';
@@ -163,7 +163,7 @@ window.intentarCompra = async (prodId, prodNombre, prodPrecio) => {
     // SI HAY SESIÓN ACTIVA: DISPARA COMPRA HACIA EL BACKEND EXPRESS
     if (confirm(`¿Autorizar descuento por valor de $${Number(prodPrecio).toLocaleString()} COP para pre-ordenar:\n"${prodNombre}"?`)) {
         try {
-            const res = await fetch('http://localhost:3000/api/pedidos', {
+            const res = await fetch('http://localhost:8080/api/pedidos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ producto_id: prodId, cantidad: 1 })
@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ================================================================
 // GESTOR DE MODAL DE AUTENTICACIÓN (LOGIN/REGISTER LOGIC)
 // ================================================================
-const SERVER_API = 'http://localhost:3000/api/auth';
+const SERVER_API = 'http://localhost:8080/api/auth';
 const authModal = document.getElementById('authModal');
 const btnOpenAuth = document.getElementById('btnOpenAuthModal');
 const btnCloseAuth = document.getElementById('closeAuthModal');
@@ -274,7 +274,7 @@ if(loginFormGlobal) {
                     
                     if(data.user.rol === 2) {
                         try {
-                            const compraRes = await fetch('http://localhost:3000/api/pedidos', {
+                            const compraRes = await fetch('http://localhost:8080/api/pedidos', {
                                 method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${data.token}` },
                                 body: JSON.stringify({ producto_id: Number(compraId), cantidad: 1 })
                             });

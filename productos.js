@@ -4,7 +4,7 @@
  */
 
 // URL del servidor local de Node.js donde configuramos nuestros endpoints CRUD
-const API_URL = 'http://localhost:3000/api/productos';
+const API_URL = 'http://localhost:8080/api/productos';
 
 // Captura de Nodos del DOM (Modal, Grilla y Formulario)
 const grid = document.getElementById('productos-grid');
@@ -75,7 +75,7 @@ async function cargarProductos() {
         grid.innerHTML = `
             <div style="grid-column: 1 / -1; background: rgba(231, 76, 60, 0.1); padding: 20px; border-left: 5px solid #e74c3c;">
                 <h3 style="color: #e74c3c;"><i class="fa-solid fa-triangle-exclamation"></i> Backend Desconectado</h3>
-                <p>No pudimos cargar los productos. Asegúrate de iniciar tu servidor Node corriendo <b>node backend/server.js</b> en la terminal.</p>
+                <p>No pudimos cargar los productos. Asegúrate de iniciar tu servidor Java arrancándolo desde el proyecto <b>backend-java/</b> estipulado.</p>
             </div>
         `;
         console.error('Fetch Error:', error);

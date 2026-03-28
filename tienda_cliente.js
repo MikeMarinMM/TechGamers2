@@ -3,7 +3,7 @@
  * Maneja el UX Retail, ocultamiento JWT basado y transaccionalidad
  */
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'http://localhost:8080/api';
 
 // Captura de Nodos de Identidad y Sesión
 const tokenJWT = localStorage.getItem('tg_token');
