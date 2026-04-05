@@ -66,11 +66,16 @@ async function renderizarTienda() {
             // Iconografía condicional a tipo de DB
             const ico = prod.tipo_articulo === 'SERVICIO_REPARACION' ? 'fa-screwdriver-wrench' : (prod.categoria_id === 1 ? 'fa-gamepad' : 'fa-laptop');
             
+            const placeholder = 'https://img.freepik.com/vector-gratis/ilustracion-icono-vectorial-dibujos-animados-controlador-juego-lentes-vr-concepto-icono-tecnologia-juego-plano_138676-4394.jpg?w=300&loading=lazy';
+            let urlImagen = placeholder;
+            const imgPath = prod.urlImagen || prod.url_imagen;
+            if (imgPath && imgPath !== 'null' && imgPath !== '') {
+                urlImagen = imgPath.startsWith('http') ? imgPath : `http://localhost:8080/${imgPath.replace(/^[\/]+/, '')}`;
+            }
+
             card.innerHTML = `
                 <div>
-                    <div class="prod-img" style="font-size:4.5rem; color:var(--primary); background:rgba(92,60,252,0.05); padding: 2rem 0; border-radius:12px;">
-                        <i class="fa-solid ${ico}"></i>
-                    </div>
+                    <img src="${urlImagen}" alt="Imágen de ${prod.nombre}" loading="lazy" style="width:100%; object-fit:cover; height:200px; margin-bottom:15px; border-radius:12px 12px 0 0; border-bottom:3px solid var(--primary);">
                     <h3 style="font-size: 1.3rem; margin-top: 15px; margin-bottom: 8px;">${prod.nombre}</h3>
                     <p style="font-size: 0.95rem; opacity: 0.7; line-height: 1.5; margin-bottom: 1.5rem; white-space: pre-wrap;">${prod.descripcion || 'Producto importado oficial para clientes de TechGamers.'}</p>
                 </div>

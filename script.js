@@ -27,12 +27,14 @@ themeToggle.addEventListener('click', () => {
 // Botón "Volver al Inicio"
 const btnBackToTop = document.getElementById('btn-back-to-top');
 
-btnBackToTop.addEventListener('click', () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
+if (btnBackToTop) {
+    btnBackToTop.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
-});
+}
 
 // Función para generar y abrir enlace de WhatsApp
 // Reemplazar este número con el real de la clínica de consolas (En Medellín, +57)
@@ -80,9 +82,14 @@ function renderizarCatalogoHTML(productos) {
         const agotado = prod.stock === 0 || prod.activo === 0;
         const filtroVisual = agotado ? 'grayscale(100%)' : 'none';
         
-        // Lazy Loading imagen genérica o Lectura Dirigida desde MySQL Backend (Node.js/uploads)
+        // Lazy Loading imagen genérica o Lectura Dirigida desde MySQL Backend
         const placeholder = 'https://img.freepik.com/vector-gratis/ilustracion-icono-vectorial-dibujos-animados-controlador-juego-lentes-vr-concepto-icono-tecnologia-juego-plano_138676-4394.jpg?w=300&loading=lazy';
-        const urlImagen = (prod.url_imagen && prod.url_imagen !== 'null' && prod.url_imagen !== '') ? `http://localhost:8080${prod.url_imagen}` : placeholder;
+        
+        let urlImagen = placeholder;
+        const imgPath = prod.urlImagen || prod.url_imagen;
+        if (imgPath && imgPath !== 'null' && imgPath !== '') {
+            urlImagen = imgPath.startsWith('http') ? imgPath : `http://localhost:8080/${imgPath.replace(/^[\/]+/, '')}`;
+        }
 
         const card = document.createElement('div');
         card.className = 'card product-card';

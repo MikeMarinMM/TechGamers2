@@ -118,7 +118,7 @@ function iniciarDashboardSeguro() {
                     <td style="font-family: monospace; font-size:1.1rem; letra-spacing: -1px;">$${Number(prod.precio).toLocaleString('es-CO')}</td>
                     <td><i class="fa-solid fa-layer-group" style="opacity:0.5; margin-right:5px;"></i>${prod.categoria_id}</td>
                     <td>
-                        <button class="btn-sm edit-row" onclick="editarRegistro(${prod.id}, '${prod.nombre.replace(/'/g, "\\'")}', '${pDesc.replace(/'/g, "\\'")}', ${prod.precio}, ${prod.categoria_id}, ${prod.stock}, '${prod.url_imagen}')">
+                        <button class="btn-sm edit-row" onclick="editarRegistro(${prod.id}, '${prod.nombre.replace(/'/g, "\\'")}', '${pDesc.replace(/'/g, "\\'")}', ${prod.precio}, ${prod.categoria_id}, ${prod.stock}, '${prod.urlImagen || prod.url_imagen}')">
                             <i class="fa-solid fa-pen"></i> Actualizar
                         </button>
                         <button class="btn-sm delete-row" onclick="eliminarRegistro(${prod.id})">
@@ -204,7 +204,7 @@ function iniciarDashboardSeguro() {
         // Reset Inputs Visuales
         imgInput.value = '';
         if(url_img && url_img !== 'null' && url_img !== 'undefined' && url_img !== '') {
-            imgPreview.src = 'http://localhost:8080' + url_img;
+            imgPreview.src = url_img.startsWith('http') ? url_img : `http://localhost:8080/${url_img.replace(/^[\/]+/, '')}`;
             imgPreview.style.display = 'inline-block';
         } else {
             imgPreview.style.display = 'none';
