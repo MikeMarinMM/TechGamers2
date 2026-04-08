@@ -19,16 +19,16 @@ public class ProductoService {
         return productoRepository.findByActivoOrderByIdDesc(1);
     }
 
-    public Producto encontrarPorId(Long id) throws Exception {
+    public Producto encontrarPorId(@org.springframework.lang.NonNull Long id) throws Exception {
         return productoRepository.findById(id)
                 .orElseThrow(() -> new Exception("No encontrado"));
     }
 
-    public Producto crearProducto(Producto producto) {
+    public Producto crearProducto(@org.springframework.lang.NonNull Producto producto) {
         return productoRepository.save(producto);
     }
 
-    public Producto actualizarProducto(Long id, Producto newData) throws Exception {
+    public Producto actualizarProducto(@org.springframework.lang.NonNull Long id, Producto newData) throws Exception {
         Producto productoDB = encontrarPorId(id);
         productoDB.setCategoriaId(newData.getCategoriaId());
         productoDB.setNombre(newData.getNombre());
@@ -43,7 +43,7 @@ public class ProductoService {
         return productoRepository.save(productoDB);
     }
 
-    public void eliminarProducto(Long id) throws Exception {
+    public void eliminarProducto(@org.springframework.lang.NonNull Long id) throws Exception {
         if (!productoRepository.existsById(id)) {
             throw new Exception("Producto no existe");
         }

@@ -21,7 +21,7 @@ public class PedidoService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public void registrarVenta(String correoUsuario, Long productoId, Integer cantidadPedida) throws Exception {
+    public void registrarVenta(String correoUsuario, @org.springframework.lang.NonNull Long productoId, Integer cantidadPedida) throws Exception {
         Usuario usuario = usuarioRepository.findByCorreo(correoUsuario)
                 .orElseThrow(() -> new Exception("Sesión inválida, usuario no encontrado"));
 

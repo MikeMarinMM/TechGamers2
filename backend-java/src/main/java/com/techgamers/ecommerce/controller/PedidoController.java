@@ -29,7 +29,7 @@ public class PedidoController {
             Long productoId = Long.valueOf(payload.get("producto_id").toString());
             Integer cantidad = Integer.valueOf(payload.getOrDefault("cantidad", 1).toString());
 
-            pedidoService.registrarVenta(correo, productoId, cantidad);
+            pedidoService.registrarVenta(correo, java.util.Objects.requireNonNull(productoId), cantidad);
             
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Venta procesada con éxito y stock descontado."));
         } catch (Exception e) {

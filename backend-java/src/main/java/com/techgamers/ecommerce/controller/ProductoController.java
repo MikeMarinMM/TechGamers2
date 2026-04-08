@@ -32,7 +32,7 @@ public class ProductoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProductoById(@PathVariable Long id) {
+    public ResponseEntity<?> getProductoById(@PathVariable @org.springframework.lang.NonNull Long id) {
         try {
             return ResponseEntity.ok(productoService.encontrarPorId(id));
         } catch (Exception e) {
@@ -76,7 +76,7 @@ public class ProductoController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateProducto(
-            @PathVariable Long id,
+            @PathVariable @org.springframework.lang.NonNull Long id,
             @RequestParam("nombre") String nombre,
             @RequestParam("descripcion") String descripcion,
             @RequestParam("precio") Double precio,
@@ -104,7 +104,7 @@ public class ProductoController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteProducto(@PathVariable Long id) {
+    public ResponseEntity<?> deleteProducto(@PathVariable @org.springframework.lang.NonNull Long id) {
         try {
             productoService.eliminarProducto(id);
             return ResponseEntity.ok(Map.of("message", "Eliminado del inventario de forma exitosa"));

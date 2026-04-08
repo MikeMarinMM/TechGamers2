@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(@org.springframework.lang.NonNull ResourceHandlerRegistry registry) {
         // Exponer la carpeta física "uploads" para que el frontend pueda visualizar las fotos subidas
         String dirUploads = Paths.get(System.getProperty("user.dir"), "uploads").toUri().toString();
         registry.addResourceHandler("/uploads/**")
