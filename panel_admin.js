@@ -2,7 +2,7 @@
  * SCRIPT FRONTAL DE PANEL ADMINISTRATIVO
  * Validaciones JWT y Operaciones de Inyección de Tokens a MySQL
  */
-const API_URL = 'http://localhost:8080/api/productos';
+const API_URL = 'http://localhost:9151/api/productos';
 
 // ------------------------------------------------------------------
 // 1. CAPA MEDIA FRONTEND: LECTURA DEL TOKEN JWT 
@@ -130,7 +130,7 @@ function iniciarDashboardSeguro() {
             });
 
         } catch (error) {
-            tabla.innerHTML = '<tr><td colspan="6" style="color:#e74c3c;"><i class="fa-solid fa-triangle-exclamation"></i> Enlace interrumpido con el API Java. Levanta Spring Boot en el puerto 8080.</td></tr>';
+            tabla.innerHTML = '<tr><td colspan="6" style="color:#e74c3c;"><i class="fa-solid fa-triangle-exclamation"></i> Enlace interrumpido con el API Java. Levanta Spring Boot en el puerto 9151.</td></tr>';
         }
     };
 
@@ -204,7 +204,7 @@ function iniciarDashboardSeguro() {
         // Reset Inputs Visuales
         imgInput.value = '';
         if(url_img && url_img !== 'null' && url_img !== 'undefined' && url_img !== '') {
-            imgPreview.src = url_img.startsWith('http') ? url_img : `http://localhost:8080/${url_img.replace(/^[\/]+/, '')}`;
+            imgPreview.src = url_img.startsWith('http') ? url_img : `http://localhost:9151${url_img.startsWith('/') ? url_img : '/' + url_img}`;
             imgPreview.style.display = 'inline-block';
         } else {
             imgPreview.style.display = 'none';

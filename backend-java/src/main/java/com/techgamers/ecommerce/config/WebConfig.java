@@ -10,16 +10,22 @@ import java.nio.file.Paths;
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
+    public void addCorsMappings(@org.springframework.lang.NonNull org.springframework.web.servlet.config.annotation.CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://127.0.0.1:5501")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*");
+    }
+
+    @Override
     public void addResourceHandlers(@org.springframework.lang.NonNull ResourceHandlerRegistry registry) {
         // Exponer la carpeta física "uploads" para que el frontend pueda visualizar las fotos subidas
         String dirUploads = Paths.get(System.getProperty("user.dir"), "uploads").toUri().toString();
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations(dirUploads);
 
-        // Mapeo para las imágenes de productos desde la ruta absoluta de TechGamers
-        // Nota: Se usa el prefijo "file:" para rutas absolutas en el sistema de archivos local.
-        String dirImagenes = "file:///C:/Users/Miguel Marin/Desktop/EstudIA Ubicua/Programación Javascript y Java - Medio/Proyecto Final/TechGamers/backend/source/imagenes/";
+        // Mapeo para las imágenes de productos relativas, hacia el entorno de recursos estáticos internos
         registry.addResourceHandler("/api/imagenes/**")
-                .addResourceLocations(dirImagenes);
+                .addResourceLocations("classpath:/static/imagenes/");
     }
 }

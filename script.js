@@ -59,7 +59,7 @@ async function inicializarCatalogoIndex() {
     if (!contenedor) return; 
 
     try {
-        const res = await fetch('http://localhost:8080/api/productos');
+        const res = await fetch('http://localhost:9151/api/productos');
         productosGlobal = await res.json();
         renderizarCatalogoHTML(productosGlobal);
     } catch {
@@ -88,7 +88,7 @@ function renderizarCatalogoHTML(productos) {
         let urlImagen = placeholder;
         const imgPath = prod.urlImagen || prod.url_imagen;
         if (imgPath && imgPath !== 'null' && imgPath !== '') {
-            urlImagen = imgPath.startsWith('http') ? imgPath : `http://localhost:8080/${imgPath.replace(/^[\/]+/, '')}`;
+            urlImagen = imgPath.startsWith('http') ? imgPath : `http://localhost:9151${imgPath.startsWith('/') ? imgPath : '/' + imgPath}`;
         }
 
         const card = document.createElement('div');
@@ -170,7 +170,7 @@ window.intentarCompra = async (prodId, prodNombre, prodPrecio) => {
     // SI HAY SESIÓN ACTIVA: DISPARA COMPRA HACIA EL BACKEND EXPRESS
     if (confirm(`¿Autorizar descuento por valor de $${Number(prodPrecio).toLocaleString()} COP para pre-ordenar:\n"${prodNombre}"?`)) {
         try {
-            const res = await fetch('http://localhost:8080/api/pedidos', {
+            const res = await fetch('http://localhost:9151/api/pedidos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ producto_id: prodId, cantidad: 1 })
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ================================================================
 // GESTOR DE MODAL DE AUTENTICACIÓN (LOGIN/REGISTER LOGIC)
 // ================================================================
-const SERVER_API = 'http://localhost:8080/api/auth';
+const SERVER_API = 'http://localhost:9151/api/auth';
 const authModal = document.getElementById('authModal');
 const btnOpenAuth = document.getElementById('btnOpenAuthModal');
 const btnCloseAuth = document.getElementById('closeAuthModal');
@@ -281,7 +281,7 @@ if(loginFormGlobal) {
                     
                     if(data.user.rol === 2) {
                         try {
-                            const compraRes = await fetch('http://localhost:8080/api/pedidos', {
+                            const compraRes = await fetch('http://localhost:9151/api/pedidos', {
                                 method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${data.token}` },
                                 body: JSON.stringify({ producto_id: Number(compraId), cantidad: 1 })
                             });

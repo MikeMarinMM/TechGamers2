@@ -4,7 +4,8 @@
  */
 
 // URL del servidor local de Node.js donde configuramos nuestros endpoints CRUD
-const API_URL = 'http://localhost:8080/api/productos';
+const API_BASE_URL = 'http://localhost:9151';
+const API_URL = `${API_BASE_URL}/api/productos`;
 
 // Captura de Nodos del DOM (Modal, Grilla y Formulario)
 const grid = document.getElementById('productos-grid');
@@ -51,8 +52,9 @@ async function cargarProductos() {
             const card = document.createElement('div');
             card.className = 'card product-card';
             card.innerHTML = `
-                <div class="prod-img" style="font-size: 3rem;">
-                    <i class="fa-solid fa-box"></i>
+                // Si prod.urlImagen es válido, concatenamos la ruta del backend, de lo contrario un placeholder local de fontawesome.
+                <div class="prod-img" style="font-size: 3rem; overflow:hidden; display:flex; justify-content:center; align-items:center; height:120px; background:#f4f4f4;">
+                    ${prod.urlImagen ? `<img src="${API_BASE_URL}${prod.urlImagen}" alt="Imagen de ${prod.nombre}" style="max-height:100%; max-width:100%; object-fit:cover;">` : `<i class="fa-solid fa-box"></i>`}
                 </div>
                 <h3 style="font-size: 1.1rem; line-height: 1.3;">${prod.nombre}</h3>
                 <p class="price" style="margin: 8px 0;">$${Number(prod.precio).toLocaleString('es-CO')} COP</p>

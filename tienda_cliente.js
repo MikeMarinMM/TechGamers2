@@ -3,7 +3,8 @@
  * Maneja el UX Retail, ocultamiento JWT basado y transaccionalidad
  */
 
-const API_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'http://localhost:9151';
+const API_URL = `${API_BASE_URL}/api`;
 
 // Captura de Nodos de Identidad y Sesión
 const tokenJWT = localStorage.getItem('tg_token');
@@ -70,7 +71,7 @@ async function renderizarTienda() {
             let urlImagen = placeholder;
             const imgPath = prod.urlImagen || prod.url_imagen;
             if (imgPath && imgPath !== 'null' && imgPath !== '') {
-                urlImagen = imgPath.startsWith('http') ? imgPath : `http://localhost:8080/${imgPath.replace(/^[\/]+/, '')}`;
+                urlImagen = imgPath.startsWith('http') ? imgPath : `${API_BASE_URL}${imgPath.startsWith('/') ? imgPath : '/' + imgPath}`;
             }
 
             card.innerHTML = `

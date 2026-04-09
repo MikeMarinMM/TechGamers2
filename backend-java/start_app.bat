@@ -38,7 +38,7 @@ set MVN=%MAVEN_EXTRACT%\bin\mvn.cmd
 
 echo.
 echo [TechGamers] Iniciando Spring Boot con Java 21...
-echo [TechGamers] URL: http://localhost:8080
+echo [TechGamers] URL: http://localhost:9151
 echo.
 
 "%MVN%" -f "%~dp0pom.xml" spring-boot:run
