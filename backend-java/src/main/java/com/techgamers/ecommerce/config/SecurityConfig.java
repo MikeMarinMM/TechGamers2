@@ -33,6 +33,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll() // Login y Registro Libre
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/productos/**").permitAll() // Vitrina Pública Libre
+                .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/productos/**").hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/productos/**").hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/productos/**").hasRole("ADMIN")
+                .requestMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN") // Perímetro restrictivo de jerarquía nivel 1
                 .requestMatchers("/uploads/**").permitAll() // Carpeta Multer Pública
                 .requestMatchers("/api/imagenes/**").permitAll() // Imágenes de productos públicas
                 .anyRequest().authenticated() // Pedidos y resto requieren token

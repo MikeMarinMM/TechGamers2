@@ -55,17 +55,17 @@ public class AuthService {
             throw new Exception("Credenciales incorrectas (Clave inválida)");
         }
 
-        String token = jwtUtil.generarToken(usuario.getCorreo(), usuario.getRol().getId(), usuario.getNombre());
+        String token = jwtUtil.generarToken(usuario.getCorreo(), usuario.getRol().getNombreRol(), usuario.getNombre());
         Map<String, Object> outputUsuario = new HashMap<>();
         outputUsuario.put("id", usuario.getId());
         outputUsuario.put("nombre", usuario.getNombre());
         outputUsuario.put("correo", usuario.getCorreo());
-        outputUsuario.put("rol", usuario.getRol().getId());
+        outputUsuario.put("role", usuario.getRol().getNombreRol());
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Acceso Autorizado");
         response.put("token", token);
-        response.put("usuario", outputUsuario);
+        response.put("user", outputUsuario);
         return response;
     }
 }

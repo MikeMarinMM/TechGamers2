@@ -29,8 +29,8 @@ public class Usuario {
     private String correo;
 
     @NotBlank
-    @Column(nullable = false)
-    private String contrasena; // Ojo, lo declaramos sin 'ñ' en Java, pero puedes mapearlo a 'contraseña' si es necesario.
+    @Column(name = "password_hash", nullable = false)
+    private String contrasena; // Se mapea directo a la columna original password_hash de la BBDD
 
     // Relación de Llave Foránea: Muchos Usuarios pueden compartir el mismo Rol
     @ManyToOne(fetch = FetchType.EAGER)

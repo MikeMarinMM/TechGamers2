@@ -12,7 +12,6 @@ const tokenJwt = localStorage.getItem('tg_token') || 'SimulacionAdmin';
 // (Nota: para probar fluidamente ahorita, ponemos 'SimulacionAdmin' o puedes des-comentarla)
 // pero lo correcto en JWT real es forzar expulsión:
 
-/* --- DESCOMENTA ESTO PARA VERDADERA PROTECCIÓN JWT EN PRODUCCIÓN ---
 const userDataStr = localStorage.getItem('tg_user');
 if (!tokenJwt || !userDataStr) {
     alert('🔐 PROTECCIÓN DE RUTA\nTechGamers: Acceso Denegado. Solo personal logueado.');
@@ -20,8 +19,8 @@ if (!tokenJwt || !userDataStr) {
 } else {
     try {
         const user = JSON.parse(userDataStr);
-        if (user.rol !== 1) { // ROL 1 = Admin, ROL 2 = Cliente
-            alert('🔐 PROTECCIÓN DE ROL\nDenegado: Tu perfil es de Cliente, no tienes jerarquía para editar el inventario.');
+        if (user.role !== 'ROLE_ADMIN') {
+            alert('🛑 Violación de Permisos: Esta ruta te ha Denegado el Acceso por falta de Jerarquía.');
             window.location.replace('index.html');
         } else {
             // Pasó todas las barreras. Revelar Panel Oculto.
@@ -34,12 +33,6 @@ if (!tokenJwt || !userDataStr) {
         window.location.replace('index.html');
     }
 }
-----------------------------------------------------------------------*/
-
-// MODO DESARROLLO (Bypass temporal simulando tener la credencial, para que pruebes tu Frontend cómodamente):
-document.body.style.display = 'block';
-document.getElementById('adminName').innerText = 'Jefe de Tienda (Modo Pruebas)';
-iniciarDashboardSeguro();
 
 
 // ------------------------------------------------------------------

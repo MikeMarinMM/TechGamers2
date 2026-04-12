@@ -52,16 +52,15 @@ async function cargarProductos() {
             const card = document.createElement('div');
             card.className = 'card product-card';
             card.innerHTML = `
-                // Si prod.urlImagen es válido, concatenamos la ruta del backend, de lo contrario un placeholder local de fontawesome.
                 <div class="prod-img" style="font-size: 3rem; overflow:hidden; display:flex; justify-content:center; align-items:center; height:120px; background:#f4f4f4;">
-                    ${prod.urlImagen ? `<img src="${API_BASE_URL}${prod.urlImagen}" alt="Imagen de ${prod.nombre}" style="max-height:100%; max-width:100%; object-fit:cover;">` : `<i class="fa-solid fa-box"></i>`}
+                    ${prod.urlImagen ? `<img src="${API_BASE_URL}${prod.urlImagen}" alt="${prod.nombre}" style="max-height:100%; max-width:100%; object-fit:cover;">` : `<i class="fa-solid fa-box"></i>`}
                 </div>
                 <h3 style="font-size: 1.1rem; line-height: 1.3;">${prod.nombre}</h3>
                 <p class="price" style="margin: 8px 0;">$${Number(prod.precio).toLocaleString('es-CO')} COP</p>
                 <div style="font-size: 0.9rem; margin-bottom: 10px; opacity: 0.8;">
                     <span>Stock: ${prod.stock}</span> | <span>Categoría ID: ${prod.categoria_id}</span>
                 </div>
-                
+                ${(typeof perfilEnLinea !== 'undefined' && perfilEnLinea && perfilEnLinea.role === 'ROLE_ADMIN') ? `
                 <div class="card-actions">
                     <button class="btn-edit" onclick="abrirModoEdicion(${prod.id}, '${prod.nombre.replace(/'/g, "\\'")}', ${prod.precio}, ${prod.categoria_id}, ${prod.stock})">
                         <i class="fa-solid fa-pen"></i> Editar
@@ -70,6 +69,7 @@ async function cargarProductos() {
                         <i class="fa-solid fa-trash"></i> Eliminar
                     </button>
                 </div>
+                ` : ''}
             `;
             grid.appendChild(card);
         });

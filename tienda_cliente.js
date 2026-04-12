@@ -19,7 +19,7 @@ if (tokenJWT && userStr) {
         lblIdentidad.innerText = `¡Hola, ${usuario.nombre}!`;
         
         // Mutación Contextual del Botón
-        if (usuario.rol === 1) { // Privilegios DB de Administrador
+        if (usuario.role === 'ROLE_ADMIN') { // Privilegios DB de Administrador
             btnAuth.innerHTML = '<i class="fa-solid fa-shield"></i> Ir al Panel Admin';
             btnAuth.href = 'panel_admin.html';
         } else { // 2 = Cliente Standard

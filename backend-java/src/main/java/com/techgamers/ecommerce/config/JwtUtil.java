@@ -24,10 +24,10 @@ public class JwtUtil {
         this.expiration = expiration;
     }
 
-    public String generarToken(String correo, Long rolId, String nombre) {
+    public String generarToken(String correo, String rolNombre, String nombre) {
         return Jwts.builder()
                 .subject(correo)
-                .claim("rolId", rolId)
+                .claim("role", rolNombre)
                 .claim("nombre", nombre)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))

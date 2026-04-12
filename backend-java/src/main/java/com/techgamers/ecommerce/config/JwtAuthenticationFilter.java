@@ -37,15 +37,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if (jwtUtil.validarToken(token)) {
                     Claims claims = jwtUtil.validarYExtraerClaims(token);
                     String correo = claims.getSubject();
-                    Long rolId = claims.get("rolId", Long.class);
+                    String rolAuth = claims.get("role", String.class);
                     
-                    // Traducción: ROL 1 es ADMIN, ROL 2 es CLIENTE.
-                    String rolAuth = (rolId != null && rolId == 1L) ? "ROLE_ADMIN" : "ROLE_CLIENTE";
+                    if(rolAuth != null) {
+                        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                                correo, null, Collections.singletonList(new SimpleGrantedAuthority(rolAuth)));
                     
-                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                            correo, null, Collections.singletonList(new SimpleGrantedAuthority(rolAuth)));
-                    
-                    SecurityContextHolder.getContext().setAuthentication(auth);
+                        SecurityContextHolder.getContext().setAuthentication(auth);
+                    }
                 }
             } catch (Exception e) {
                 // Si el token es falso o expirado, lo ignoramos y seguirá como Anónimo.

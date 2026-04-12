@@ -259,7 +259,7 @@ if(loginFormGlobal) {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     correo: document.getElementById('login_email').value,
-                    password: document.getElementById('login_pass').value
+                    contrasena: document.getElementById('login_pass').value
                 })
             });
             const data = await res.json();
@@ -279,7 +279,7 @@ if(loginFormGlobal) {
                     
                     Swal.fire({ toast:true, position:'top-end', icon:'info', title:'Procesando tu pedido...', showConfirmButton:false, timer:1500, background: '#12141d', color: '#fff' });
                     
-                    if(data.user.rol === 2) {
+                    if(data.user.role === 'ROLE_USER') {
                         try {
                             const compraRes = await fetch('http://localhost:9151/api/pedidos', {
                                 method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${data.token}` },
@@ -304,7 +304,7 @@ if(loginFormGlobal) {
                         title: `Identidad Avalada, ${data.user.nombre.split(' ')[0]}`,
                         showConfirmButton: false, timer: 1500, timerProgressBar: true, background: '#12141d', color: '#fff'
                     }).then(() => {
-                        window.location.replace(data.user.rol === 1 ? 'panel_admin.html' : 'productos.html');
+                        window.location.replace(data.user.role === 'ROLE_ADMIN' ? 'panel_admin.html' : 'productos.html');
                     });
                 }
             } else {
@@ -337,8 +337,8 @@ if(regFormGlobal) {
                 body: JSON.stringify({
                     nombre: document.getElementById('reg_nombre').value,
                     correo: document.getElementById('reg_email').value,
-                    password: document.getElementById('reg_pass').value,
-                    rol_id: Number(document.getElementById('reg_rol').value) // Captura rol Académico
+                    contrasena: document.getElementById('reg_pass').value,
+                    rol: { id: Number(document.getElementById('reg_rol').value) } // Captura rol mapeado al Entity
                 })
             });
             const data = await res.json();

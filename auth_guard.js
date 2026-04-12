@@ -38,14 +38,14 @@ if (TOKEN_ACTUAL) {
 // Bloqueamos agresivamente si el archivo actual no coincide con los permisos.
 const pathArchivo = window.location.pathname.toLowerCase();
 
-if (pathArchivo.includes('panel_admin.html')) {
+if (pathArchivo.includes('panel_admin.html') || pathArchivo.includes('productos.html')) {
     // REGLA: Exclusivo Administradores
-    if (!perfilEnLinea || perfilEnLinea.rol !== 1) { // 1 = Admin
+    if (!perfilEnLinea || perfilEnLinea.role !== 'ROLE_ADMIN') { // Validación Pura de String
         alert('🛑 Violación de Permisos: Esta ruta te ha Denegado el Acceso por falta de Jerarquía.');
         window.location.replace('index.html');
     }
 } 
-else if (pathArchivo.includes('productos.html') || pathArchivo.includes('tienda_cliente.html')) {
+else if (pathArchivo.includes('tienda_cliente.html')) {
     // REGLA: Exclusivo Usuarios Autenticados (Clientes que quieren ver Historial / Catálogo)
     if (!perfilEnLinea) {
         alert('✨ Área restinguida.\nPor favor autentícate antes de ingresar al catálogo detallado o tu historial.');
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (perfilEnLinea && authNavContainer) {
         const nombreCorto = perfilEnLinea.nombre ? perfilEnLinea.nombre.split(' ')[0] : 'Usuario';
         
-        if (perfilEnLinea.rol === 1) {
+        if (perfilEnLinea.role === 'ROLE_ADMIN') {
             // Interfaz de Administrador
             authNavContainer.innerHTML = `
                 <div style="display:flex; align-items:center; gap:15px;">
@@ -85,6 +85,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     </button>
                 </div>
             `;
+        }
+        
+    }
+    
+    // REGLA: Dinamismo de Títulos (Requisito Seguridad Frontend para intrusos visuales)
+    const logoLink = document.querySelector('header .logo a');
+    if(logoLink) {
+        if(perfilEnLinea && perfilEnLinea.role === 'ROLE_ADMIN') {
+            logoLink.innerHTML = '<i class="fa-solid fa-gamepad"></i> TechGamers Admin';
+        } else if (perfilEnLinea) {
+            logoLink.innerHTML = `<i class="fa-solid fa-gamepad"></i> Panel de Usuario - ${perfilEnLinea.nombre.split(' ')[0]}`;
         }
     }
 });
