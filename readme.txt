@@ -54,5 +54,9 @@ contraseñas reales a repositorios publicos de GitHub.
   Contraseña: juanperez123
   (Permisos Restringidos: Vitrina pública y Carrito. Cero acceso administrativo)
 
+- En MySql localhost:
+  Username: root
+  Contraseña: usuario1
+
 =========================================================
 Nota: En caso de cambios drásticos al código del Frontend, se recomienda "Limpiar Caché" del navegador o desloguearse (Cerrar Sesión) para limpiar el JSON Web Token de la memoria del explorador.
